@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.9.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.22" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InventorySampleServer.Common\InventorySampleServer.Common.csproj" />
+    <ProjectReference Include="..\InventorySampleServer.DAL\InventorySampleServer.DAL.csproj" />
+    <ProjectReference Include="..\InventorySampleServer.Model\InventorySampleServer.Model.csproj" />
+    <ProjectReference Include="..\InventorySampleServer.Infrastructure\InventorySampleServer.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

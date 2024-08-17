@@ -1,0 +1,218 @@
+﻿
+
+.top-header .navbar,
+.top-header .navbar .user-setting {
+    background-color: #FFF !important;
+    background-color: transparent !important;
+}
+
+.sidebar-wrapper .sidebar-header,
+.simplebar-content-wrapper {
+    background-color: #111C43
+}
+
+.sidebar-wrapper .metismenu a,
+.toggle-icon {
+    color: #A3AEC8;
+    color: #FFF;
+}
+
+    .toggle-icon:hover {
+        background-color: transparent;
+    }
+
+    .toggle-icon:hover {
+        color: #FFF;
+    }
+
+
+.top-header .navbar .nav-link .bi-purple.notify-badge {
+    background-color: rgb(132,90,223) !important;
+}
+.bi-blue {
+    background-color: rgb(35,183,229) !important;
+}
+.top-header .navbar .top-navbar-right .nav-link {
+    color: rgba(210,210,210) !important;
+    font-size:20px!important;
+}
+    .top-header .navbar .top-navbar-right .nav-link:hover {
+        background-color: transparent !important;
+        color: #FFF !important;
+    }
+
+    .top-header .navbar .top-navbar-right .nav-link:hover svg {
+        fill: #FFF !important;
+    }
+
+    .bi-user-block * {
+        color: #536485 !important
+    }
+
+nav.navbar.navbar-expand.gap-3 {
+    /*background: rgb(33,106,185);*/
+    /*background-image: linear-gradient(#2B79C3, #3989ce) !important;*/
+    background-color:transparent !important;
+}
+
+.top-header .navbar .user-setting {
+    background-color: transparent !important;
+}
+
+.top-header .navbar .user-name,
+.top-header .navbar .dropdown-user-designation {
+    color: white !important;
+}
+
+.z-tabBar {
+    /*background-image: linear-gradient( rgb(44,122,195),rgb(56,137,205)) !important;*/
+}
+
+.z-x:hover {
+    background-color: #de0000 !important;
+    color:white !important;
+}
+.wrapper {
+    background-image: url("../images/background/default.jpg") !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    background-position: center !important;
+    background-size: cover !important;
+}
+
+.z-tab-item {
+    color: white;
+    background: #325B85;
+}
+    .z-tab-item:not(.z-tab-active):hover {
+        background: #1C334C;
+    }
+
+.z-tab-item a {
+    color: white;
+}
+
+    .z-tab-item.z-tab-active {
+        color: rgb(13, 45, 118) !important;
+        background-color: white !important;
+        border-top-color: #33D7FF;
+    }
+        .z-tab-item.z-tab-active a {
+            color: rgb(13, 45, 118) !important;
+        }
+.sidebar-wrapper,
+.sidebar-wrapper .sidebar-header, .simplebar-content-wrapper {
+    background-color: transparent !important;
+}
+
+.sidebar-hovered .sidebar-wrapper {
+    background-color: #487EBC !important;
+}
+.sidebar-wrapper{
+    z-index:99;
+}
+.form-select:focus {
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0 .1rem rgba(13, 110, 253, .25) !important;
+}
+
+
+
+.is-open .choices__list--dropdown {
+    border-color: #b7b7b7 !important;
+    border-top-color:#ddd;
+
+
+
+}
+
+.choices__inner {
+    /*background-color: #fbfbfb !important;*/
+}
+.choices__inner:hover {
+    background-color: #fff !important;
+    border-color:#ddd !important;
+}
+    .is-open .choices__inner,
+    .choices__inner:focus {
+        /* box-shadow: 0 0 1px 0px #00a2ff !important;
+        border-color: #00a2ff !important;*/
+        border-color: #86b7fe !important;
+        box-shadow: 0 0 0 .1rem rgba(13, 110, 253, .25) !important;
+    }
+.choices__list--dropdown .choices__item--selectable.is-highlighted {
+    color: #4c5258 !important;
+    background: #dcedfe linear-gradient(rgba(255, 255, 255, .3), transparent) !important;
+}
+.choices__list--dropdown .choices__item--selectable.is-selected.is-highlighted {
+    color: rgba(13, 110, 253) !important;
+}
+.choices__list--dropdown .choices__item--selectable.is-selected {
+    color: rgba(13, 110, 253) !important;
+}
+
+.z-tab-active .z-tab-icon {
+    color: #1fa1ef !important
+}
+
+
+.z-ribbon .bb-ribbon-item {
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+    
+}
+    .z-ribbon .bb-ribbon-item:hover {
+        background-color: #f7f5e9 !important;
+    }
+.z-widget-list-modal .modal-content {
+    background-color: rgba(0,0,0,0.4) !important;
+    backdrop-filter: blur(3px);
+}
+
+
+.z-widget-list-modal .modal-header {
+    background-color:transparent !important;
+    color:rgba(255,255,255,0.8)  !important;
+}
+.z-widget-list-modal .modal-header i:hover{
+    color: rgba(255,255,255,1) !important;
+}
+
+.z-widget-list-modal .tab-content .tab-pane {
+}
+.z-widget-list-modal  .nav.nav-tabs{
+    border-bottom:1px solid rgba(190,190,190)  !important;
+}
+
+.z-widget-list-modal .tab-content {
+    background-color: rgba(255,255,255,0.2) !important;
+}
+.z-widget-list-modal .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link {
+    color: rgba(255,255,255,0.8) !important;
+}
+.z-widget-list-modal .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link:hover {
+    color: rgba(255,255,255,1) !important;
+}
+.z-widget-list-modal .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: rgba(255,255,255,1) !important;
+    background-color: transparent !important;
+    border-color: #FFF !important;
+}
+thead th {
+    color: var(--default-text-color) !important; 
+}
+.z-signin-btn {
+    background-color: rgba(66, 65, 65,0.84);
+    color: white;
+}
+.z-signin-btn:hover {
+    background-color: rgba(66, 65, 65,0.9);
+    color: white;
+}
+
+.zsp-request-hader .badge {
+    background-color: rgb(132,90,223) !important
+}
+.z-current-status {
+    background-color: #c2a2df54 !important;
+    color: #9763bd;
+}

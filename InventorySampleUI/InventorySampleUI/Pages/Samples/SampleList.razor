@@ -1,0 +1,83 @@
+﻿@using InventorySampleUI.Model
+@using InventorySampleUI.Services
+@using Microsoft.Extensions.Localization
+@using Newtonsoft.Json
+
+
+    
+<div class="dm-grid-container">
+
+<Grid TItem="Customer"
+      Class="table table-hover table-bordered table-striped"
+      DataProvider="CustomersDataProvider"
+      AllowFiltering="false"
+      AllowPaging="true"
+      AllowSorting="true"
+      Responsive="true"
+          PageSize="@Pagesize"
+          EmptyText="رکوردی یافت نشد."
+          PageSizeSelectorVisible="true"
+          PageSizeSelectorItems="@PageSizeOptions">
+
+    <GridColumn TItem="Customer"  HeaderText="شناسه" PropertyName="Id" SortString="Id" SortKeySelector="item => item.Id" FilterTextboxWidth="50" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+        @context.Id
+    </GridColumn>
+    <GridColumn TItem="Customer" HeaderText="نام مشتری" PropertyName="Name" SortString="Name" SortKeySelector="item => item.Name" FilterTextboxWidth="80">
+        @context.Name
+    </GridColumn>
+</Grid>
+@* <div>
+        <Pagination ActivePageNumber="@currentPageNumber"
+                    TotalPages="10"
+                    PageChanged="OnPageChangedAsync" />
+
+        <text>Current Page Number: @currentPageNumber</text>
+        <Dropdown>
+            <DropdownToggleButton Type="BlazorBootstrap.ButtonType.Link"></DropdownToggleButton>
+            <DropdownMenu>
+                @foreach (var cat in CategoryList)
+                {
+                    <DropdownItem @onclick="() => CategoryCahnged(cat)" Type="BlazorBootstrap.ButtonType.Link">@cat.Title</DropdownItem>
+                }
+            </DropdownMenu>
+        </Dropdown>
+
+
+</div> *@
+
+</div>
+@code{
+
+    [Inject] public ICustomerService _customerService { get; set; } = default!;
+    int[] PageSizeOptions = new int[] { 5, 10, 20 };
+    int Pagesize = 10;
+    List<Customer> CustomerList = new List<Customer>();
+    private async Task<GridDataProviderResult<Customer>> CustomersDataProvider(GridDataProviderRequest<Customer> request)
+    {
+        string sortString = "";
+        SortDirection sortDirection = SortDirection.None;
+        if (request.Sorting is not null && request.Sorting.Any())
+        {
+            // Note: Multi column sorting is not supported at this moment
+            sortString = request.Sorting.FirstOrDefault()!.SortString;
+            sortDirection = request.Sorting.FirstOrDefault()!.SortDirection;
+        }
+        // var result = await _customerService.GetCustomersAsync(request.Filters, request.PageNumber, request.PageSize, sortString, sortDirection, request.CancellationToken);
+        var filters = request.Filters;
+        var pagenumber = request.PageNumber;
+        Pagesize = request.PageSize;
+        var cancellationtoken = request.CancellationToken;
+
+        var result =  _customerService.GetList();
+        CustomerList = JsonConvert.DeserializeObject<List<Customer>>(JsonConvert.SerializeObject(result.Data));
+        return await Task.FromResult(new GridDataProviderResult<Customer> { Data = CustomerList, TotalCount = result.Count });
+    }
+
+    int currentPageNumber = 2;
+
+    private async Task OnPageChangedAsync(int newPageNumber)
+    {
+        await Task.Run(() => { currentPageNumber = newPageNumber; });
+    }
+
+}

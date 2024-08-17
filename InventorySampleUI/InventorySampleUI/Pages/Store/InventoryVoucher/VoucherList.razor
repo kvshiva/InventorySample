@@ -1,0 +1,107 @@
+﻿@page "/VoucherList/{HeaderId:int}"
+
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using BlazorBootstrap;
+@using InventorySampleServer.Model.Custom.InventoryVoucher
+@using InventorySampleServer.Model.Custom.Other
+@using InventorySampleServer.Model.Store.InventoryVoucher;
+@using InventorySampleServer.Model.Store.InventoryVoucherSpecification
+@using InventorySampleUI.Service;
+@using InventorySampleUI.Shared.Toolbar;
+@using InventorySampleServer.Model.Enum;
+
+<h3>لیست اسناد</h3>
+<ListToolbar OnNewClick="OnNewClick" ShowEdit="RowClicked" ShowDelete=RowClicked OnEditClick="OnEditClick" OnDeleteClick="OnDeleteClick" OnReloadClick="OnReloadClick" />
+@if(list != null)
+{
+    <BlazorBootstrap.Grid @ref="grid"
+                          TItem="InventoryVoucherListVM"
+                          Class="table table-hover table-bordered table-striped"
+                          Data="list"
+                          AllowFiltering="true"
+                          Responsive="true" Style="direction:rtl"
+                          AllowRowClick="true"
+                          OnRowClick="OnRowClick"
+                          OnRowDoubleClick="OnRowDoubleClick">
+        <GridColumn TItem="InventoryVoucherListVM" HeaderText="شناسه"> @context.Id </GridColumn>
+        <GridColumn TItem="InventoryVoucherListVM" HeaderText="شماره سند "> @context.InventoryVoucherNo </GridColumn>
+        <GridColumn TItem="InventoryVoucherListVM" HeaderText="نام سند"> @context.InventoryVoucherSpecificationTitle </GridColumn>
+        <GridColumn TItem="InventoryVoucherListVM" HeaderText="نوع سند"> @context.InventoryVoucherSpecificationTypeEnumTitle </GridColumn>
+        <GridColumn TItem="InventoryVoucherListVM" HeaderText="انبار"> @context.StoreTitle </GridColumn>
+        <GridColumn TItem="InventoryVoucherListVM" HeaderText="تاریخ"> @context.PersianDate </GridColumn>
+        <GridColumn TItem="InventoryVoucherListVM" HeaderText="توضیح"> @context.Comment </GridColumn>
+        <GridColumn TItem="InventoryVoucherListVM" HeaderText="وضعیت"> @context.StateEnumTitle </GridColumn>
+        <GridColumn TItem="InventoryVoucherListVM" HeaderText="ثبت کننده"> @context.CreatedBy </GridColumn>
+
+
+    </BlazorBootstrap.Grid>
+}
+
+@code {
+    @inject NavigationManager UriHelper
+    @inject StoreService storeService
+    BlazorBootstrap.Grid<InventoryVoucherListVM> grid = default!;
+    private List<InventoryVoucherListVM>? list;
+    private InventoryVoucherListVM? SelectedRow;
+    private bool RowClicked = false;
+    private bool RenderedOnce = false;
+    [Parameter]
+    public int HeaderId { get; set; }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadList();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        
+        if (!RenderedOnce)
+        {
+            RenderedOnce = true;
+            await LoadList();
+        }
+    }
+
+    private async Task LoadList()
+    {
+        list = await storeService.GetInventoryVoucherListCustom(new GetListParamsDto() { EntityId = HeaderId });
+        StateHasChanged();
+    }
+    // ToolBar Actions ----------------------------------------------
+    private async void OnReloadClick()
+    {
+        await LoadList();
+    }
+    private async void OnNewClick()
+    {
+        var HeaderEntity = await storeService.GetInventoryVoucherSpecificationById(HeaderId);
+        if(HeaderEntity.InventoryVoucherSpecificationTypeEnumTitle== InventoryVoucherSpecificationTypeEnum.رسید.ToString())
+            UriHelper.NavigateTo("/ReceiptEdit/" + HeaderId + "/" + 0);
+        if (HeaderEntity.InventoryVoucherSpecificationTypeEnumTitle == InventoryVoucherSpecificationTypeEnum.حواله.ToString())
+            UriHelper.NavigateTo("/RemittanceEdit/" + HeaderId + "/" + 0);
+    }
+    private void OnEditClick()
+    {
+        if (SelectedRow?.InventoryVoucherSpecificationTypeEnumTitle == InventoryVoucherSpecificationTypeEnum.رسید.ToString())
+            UriHelper.NavigateTo("/ReceiptEdit/" + HeaderId + "/" + SelectedRow.Id);
+        if (SelectedRow?.InventoryVoucherSpecificationTypeEnumTitle == InventoryVoucherSpecificationTypeEnum.حواله.ToString())
+            UriHelper.NavigateTo("/RemittanceEdit/" + HeaderId + "/" + SelectedRow.Id);
+    }
+    private void OnDeleteClick()
+    {
+        
+    }
+    // Grid Row Actions ----------------------------------------------
+    private async Task OnRowClick(GridRowEventArgs<InventoryVoucherListVM> args)
+    {
+        RowClicked = true;
+        SelectedRow = args.Item;
+    }
+    private async Task OnRowDoubleClick(GridRowEventArgs<InventoryVoucherListVM> args)
+    {
+        RowClicked = true;
+        SelectedRow = args.Item;
+    }
+}

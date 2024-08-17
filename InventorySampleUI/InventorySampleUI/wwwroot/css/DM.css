@@ -1,0 +1,72 @@
+﻿
+.dm-menu .accordion-body {
+    padding: 0
+}
+
+.dm-menu .accordion-item,
+.dm-menu .accordion-item .accordion-button {
+    border-radius: 0 !important;
+}
+
+.dm-menu .accordion-item {
+    background-color:transparent !important;
+}
+
+
+    .dm-menu .accordion-item .accordion-button {
+        background: transparent;
+        color: white;
+    }
+
+.dm-menu .accordion-item:not(:last-child) {
+    border-bottom:1px solid rgba(255,255,255,0.6) !important;
+}
+
+.dm-submenu .accordion-item:first-of-type {
+    border-top: 0 !important;
+}
+.dm-submenu .accordion-item:last-of-type {
+    border-bottom: 0 !important;
+}
+.dm-submenu .accordion-item {
+    border-right: 0 !important;
+    border-left: 0 !important;
+    background-color: #4b577fde !important;
+}
+.dm-submenu .accordion-button{
+    padding:0.5rem 2rem 0.5rem 0 !important
+}
+
+.dm-submenu .accordion-item  .accordion-body {
+   background: #d3d6d9 !important;
+   padding-right:2.5rem !important
+}
+.dm-menu-page {
+    display: block !important;
+    color: #4b577fde;
+    text-decoration:none!important
+}
+.dm-menu .accordion-button::after {
+    display:none !important
+}
+.dm-grid-container .pagination{
+    direction:ltr;
+}
+.bb-grid-pagination-text {
+    position: relative;
+}
+
+.dm-grid-container .table-responsive + div > div .bb-grid-pagination-text {
+    color: transparent;
+}
+
+.dm-grid-container .table-responsive + div > div .bb-grid-pagination-text:after {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    color: red;
+    content: 'تعداد در هر صفحه';
+}
+.dm-grid-container .table-responsive + div > div.bb-grid-pagination-text {
+  display:none
+}

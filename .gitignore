@@ -1,0 +1,24 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/InventorySampleServer/.vs
+/InventorySampleServer/InventorySampleServer.Api/bin
+/InventorySampleServer/InventorySampleServer.Api/obj
+/InventorySampleServer/InventorySampleServer.BLL/bin
+/InventorySampleServer/InventorySampleServer.BLL/obj
+/InventorySampleServer/InventorySampleServer.Common/bin
+/InventorySampleServer/InventorySampleServer.Common/obj
+/InventorySampleServer/InventorySampleServer.DAL/bin
+/InventorySampleServer/InventorySampleServer.DAL/obj
+/InventorySampleServer/InventorySampleServer.Infrastructure/bin
+/InventorySampleServer/InventorySampleServer.Infrastructure/obj
+/InventorySampleServer/InventorySampleServer.Model/bin
+/InventorySampleServer/InventorySampleServer.Model/obj
+/InventorySampleUI/.vs
+/InventorySampleUI/InventorySampleUI/bin
+/InventorySampleUI/InventorySampleUI/obj
+/InventorySampleUI/InventorySampleUI.Service/obj
+/InventorySampleUI/InventorySampleUI.Service/bin
+/InventorySampleUI/InventorySampleUI.Model/obj
+/InventorySampleUI/InventorySampleUI.Model/bin

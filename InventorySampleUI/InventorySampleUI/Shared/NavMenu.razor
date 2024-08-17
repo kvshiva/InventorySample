@@ -1,0 +1,105 @@
+﻿@using InventorySampleServer.Model.Store.InventoryVoucherSpecification
+@using InventorySampleServer.Model.Enum;
+@using InventorySampleUI.Service;
+
+<Accordion @ref="mainMenu" Class="dm-menu">
+
+
+    <AccordionItem Title="اسناد انبار" Name="home">
+        <Content>
+            <Accordion  Class="dm-submenu">
+                @if (List != null)
+                {
+                    <AccordionItem Title=@InventoryVoucherSpecificationTypeEnum.رسید.ToString() Name="AccordionItem1">
+                        <Content>
+                            @foreach (var item in List.Where(s => s.InventoryVoucherSpecificationTypeEnumId == 1))
+                            {
+                                <NavLink @onclick="()=>GotoVoucherList(item.Id)" class="dm-menu-page">
+                                    @item.Title
+                                </NavLink>
+                            }
+                        </Content>
+                    </AccordionItem>
+
+                    <AccordionItem Title=@InventoryVoucherSpecificationTypeEnum.حواله.ToString() Name="AccordionItem1">
+                        <Content>
+                            @foreach (var item in List.Where(s => s.InventoryVoucherSpecificationTypeEnumId == 2))
+                            {
+                                <NavLink @onclick="()=>GotoVoucherList(item.Id)" class="dm-menu-page">
+                                    @item.Title
+                                </NavLink>
+                            }
+                        </Content>
+                    </AccordionItem>
+
+                    <AccordionItem Title=@InventoryVoucherSpecificationTypeEnum.انتقال.ToString() Name="AccordionItem1">
+                        <Content>
+                            @foreach (var item in List.Where(s => s.InventoryVoucherSpecificationTypeEnumId == 3))
+                            {
+                                <NavLink @onclick="()=>GotoTransferList(item.Id)" class="dm-menu-page">
+                                    @item.Title
+                                </NavLink>
+                            }
+                        </Content>
+                    </AccordionItem>
+
+                    <AccordionItem Title=@InventoryVoucherSpecificationTypeEnum.اول_دوره.ToString() Name="AccordionItem1">
+                        <Content>
+                            @foreach (var item in List.Where(s => s.InventoryVoucherSpecificationTypeEnumId == 4))
+                            {
+                                <NavLink @onclick="()=>GotoVoucherList(item.Id)" class="dm-menu-page">
+                                    @item.Title
+                                </NavLink>
+                            }
+                        </Content>
+                    </AccordionItem>
+                }
+            </Accordion>
+            </Content>
+    </AccordionItem>
+
+
+    <AccordionItem Title="پروفایل" Name="profile">  
+        <Content>
+         
+        </Content>
+    </AccordionItem>
+
+
+</Accordion>
+
+
+
+@code {
+    @inject StoreService storeService
+    @inject NavigationManager UriHelper
+    private Accordion mainMenu = default!;
+    private bool collapseNavMenu = true;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private InventoryVoucherSpecificationTypeEnum Types;
+    public List<InventoryVoucherSpecificationListDto>? List;
+    private bool RenderedOnce = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!RenderedOnce)
+        {
+            RenderedOnce = true;
+            List = await storeService.GetInventoryVoucherSpecificationList();
+            StateHasChanged();
+        }
+    }
+
+    private void GotoVoucherList(int HeaderId)
+    {
+        UriHelper.NavigateTo("/VoucherList/" + HeaderId);
+    }
+    private void GotoTransferList(int HeaderId)
+    {
+        UriHelper.NavigateTo("/TransferList/" + HeaderId);
+    }
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

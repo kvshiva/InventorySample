@@ -1,0 +1,188 @@
+﻿
+<Ribbon >
+    <div class="d-flex flex-row border z-ribbon">
+        @if (ShowNew)
+        {
+            <Tooltip Class="d-inline-block" Title="جدید" role="button" @onclick="NewClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/New.gif" ImgWidth="16" />
+        </Tooltip>
+        }
+        @if (ShowOpen)
+        {
+            <Tooltip Class="d-inline-block" Title="باز کردن" role="button" @onclick="OpenClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Open.gif" ImgWidth="16" />
+        </Tooltip>
+        }
+        @if (ShowSave)
+        {
+            <Tooltip Class="d-inline-block" Title="ذخیره" role="button" @onclick="SaveClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Save.gif" ImgWidth="16" />
+        </Tooltip>
+        }
+        @if (ShowSaveAndNew)
+        {
+            <Tooltip Class="d-inline-block" Title="ذخیره و جدید" role="button" @onclick="SaveAndNewClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/SaveAndNew.gif" ImgWidth="16" />
+        </Tooltip>
+        }
+        @if (ShowSaveAndClose)
+        {
+            <Tooltip Class="d-inline-block" Title="ذخیره و بستن" role="button" @onclick="SaveAndCloseClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/SaveAndClose.gif" ImgWidth="16" />
+        </Tooltip>
+        }
+        @if (ShowDeleteAndClose)
+        {
+            <Tooltip Class="d-inline-block" Title="حذف و بستن" role="button" @onclick="DeleteAndCloseClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/DeleteAndClose.gif" ImgWidth="16" />
+        </Tooltip>
+        }
+        @if (ShowDeleteAndNew)
+        {
+            <Tooltip Class="d-inline-block" Title="حذف و جدید" role="button" @onclick="DeleteAndNewClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/DeleteAndNew.gif" ImgWidth="16" />
+        </Tooltip>
+        }
+        @if (ShowReload)
+        {
+            <Tooltip Class="d-inline-block" Title="بارگذاری مجدد" role="button" @onclick="ReloadClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Reload.gif" ImgWidth="16" />
+        </Tooltip>
+       }
+        @if (ShowPrint)
+        {
+             <Tooltip Class="d-inline-block" Title="چاپ" role="button" @onclick="PrintClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Print.gif" ImgWidth="16" />
+        </Tooltip>
+        }
+        @if (ShowNotification)
+        {
+            <Tooltip Class="d-inline-block" Title="دریافت اطلاع از تغییرات" role="button" @onclick="NotificationClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Notify.png" ImgWidth="16" />
+        </Tooltip>
+        }
+        @if (ShowHelp)
+        {
+            <Tooltip Class="d-inline-block" Title="راهنما" role="button" @onclick="HelpClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Help.gif" ImgWidth="16" />
+        </Tooltip>
+
+        }
+        
+    </div>
+
+</Ribbon>
+
+
+@code {
+    
+
+
+    [Parameter]
+    public bool ShowNew { get; set; } = false;
+    [Parameter]
+    public bool ShowOpen { get; set; } = false;
+    [Parameter]
+    public bool ShowSave { get; set; } = true;
+    [Parameter]
+    public bool ShowSaveAndNew { get; set; } = false;
+    [Parameter]
+    public bool ShowSaveAndClose { get; set; } = true;
+    [Parameter]
+    public bool ShowDeleteAndClose { get; set; } = false;
+    [Parameter]
+    public bool ShowDeleteAndNew { get; set; } = false;
+    [Parameter]
+    public bool ShowReload { get; set; } = true;
+    [Parameter]
+    public bool ShowNotification { get; set; } = false;
+    [Parameter]
+    public bool ShowPrint { get; set; } = false;
+    [Parameter]
+    public bool ShowHelp { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<bool> OnNewClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnOpenClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnSaveClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnSaveAndNewClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnSaveAndCloseClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnDeleteAndCloseClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnDeleteAndNewClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnReloadClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnNotificationClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnPrintClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnHelpClick { get; set; }
+
+    private async Task OnConfirmDelete()
+    {
+        // switch (FiredEvent)
+        // {
+        //     case EventType.Delete_and_New:
+
+        //         await OnDeleteAndNewClick.InvokeAsync(true);
+        //         break;
+
+        //     case EventType.Delete_And_Close:
+
+        //         await OnDeleteAndCloseClick.InvokeAsync(true);
+        //         break; 
+        // }
+    }
+
+    async Task NewClicked()
+    {
+        await OnNewClick.InvokeAsync(true);
+    }
+    async Task OpenClicked()
+    {
+        await OnOpenClick.InvokeAsync(true);
+    }
+    async Task DeleteAndNewClicked()
+    {
+        await OnDeleteAndNewClick.InvokeAsync(true);
+    }
+    async Task DeleteAndCloseClicked()
+    {
+        await OnDeleteAndCloseClick.InvokeAsync(true);
+    }
+
+    async Task ReloadClicked()
+    {
+        await OnReloadClick.InvokeAsync(true);
+    }
+    async Task NotificationClicked()
+    {
+        await OnNotificationClick.InvokeAsync(true);
+    }
+    async Task SaveClicked()
+    {
+        await OnSaveClick.InvokeAsync(true);
+    }
+    async Task SaveAndNewClicked()
+    {
+        await OnSaveAndNewClick.InvokeAsync(true);
+    }
+    async Task SaveAndCloseClicked()
+    {
+        await OnSaveAndCloseClick.InvokeAsync(true);
+    }
+    async Task PrintClicked()
+    {
+        await OnPrintClick.InvokeAsync(true);
+    }
+    async Task HelpClicked()
+    {
+        await OnHelpClick.InvokeAsync(true);
+    }
+}

@@ -1,0 +1,165 @@
+﻿@page "/ReceiptEdit/{HeaderId:int}/{EntityId:int}"
+
+@using Microsoft.AspNetCore.Components.Web;
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.JSInterop
+@using InventorySampleServer.Model.Store.InventoryVoucherItem
+@using InventorySampleUI.Shared.Toolbar;
+@using InventorySampleUI.Service;
+@using InventorySampleServer.Model.Store.InventoryVoucher;
+@using InventorySampleServer.Model.Store.Store;
+@using InventorySampleServer.Model.Custom.InventoryVoucher;
+@using System.ComponentModel.DataAnnotations;
+@using BlazorBootstrap
+@using Blazor.PersianDatePicker
+@inject IJSRuntime JSRuntime
+
+
+<h3>ثبت سند رسید</h3>
+
+@if(EntityVM!=null)
+{
+    <EditToolbar OnSaveClick="OnSaveClick" OnSaveAndCloseClick="OnSaveAndCloseClick" OnReloadClick="OnReloadClick"></EditToolbar>
+    <br />
+    <div class="d-flex gap-2 mb-4">
+        @if (StoreList != null)
+        {
+            <Dropdown Color="DropdownColor.Light">
+                <DropdownToggleButton>انتخاب انبار</DropdownToggleButton>
+                <DropdownMenu>
+                    @foreach (var s in StoreList)
+                    {
+                        <DropdownItem @onclick="() =>AssignStore(s)">@s.Title</DropdownItem>
+                    }
+                </DropdownMenu>
+            </Dropdown>
+        }
+    </div>
+    @if(EntityVM.Voucher.StoreId != 0)
+    {
+        @if(EntityVM.Voucher.Id>0)
+        {
+            <div class="form-group">
+                <label for="storeTitle">شماره سند</label>
+                <input type="text" id="storeTitle" class="form-control" @bind="EntityVM.Voucher.InventoryVoucherNo" readonly />
+            </div>
+            <br />
+        }
+        <div class="form-group">
+            <label for="storeTitle">انبار</label>
+            <input type="text" id="storeTitle" class="form-control" @bind="EntityVM.Voucher.StoreTitle" readonly />
+        </div><br />
+        <div class="form-group">
+            <label for="storeTitle">کاربر</label>
+            <input type="text" id="storeTitle" class="form-control" @bind="EntityVM.Voucher.UserFullName" readonly />
+        </div><br />
+
+        <div class="form-group">
+            <label for="InventoryVoucherSpecificationTitle">الگو</label>
+            <input type="text" id="InventoryVoucherSpecificationTitle" class="form-control" @bind="EntityVM.Voucher.InventoryVoucherSpecificationTitle" readonly />
+        </div><br />
+
+        <div class="form-group">
+            <label for="persianDate">تاریخ</label>
+            <InputPersianDatePicker Id="myInputDatePicker" @bind-Value="EntityVM.Voucher.PersianDate" Visible="true" PickerAlign="Align.Left"
+               InitialValueSetOnToday="false" CalendarType="Calendar.SingleModeJalali" DigitType="DigitType.BasedOnCalendar" DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+               MinDateSetOnToday="false" CssClass="form-control" Theme="PickerTheme.Cheerup" />
+        </div><br />
+
+        <div class="form-group">
+            <label for="comment">توضیح</label>
+            <textarea id="comment" class="form-control" @bind="EntityVM.Voucher.Comment"></textarea>
+        </div>
+
+        // Items
+        <VoucherItemList HeaderVM="EntityVM" OnListChange="AssignList"></VoucherItemList>
+    }
+}
+
+
+@code {
+@inject StoreService storeService
+    [Parameter]
+    public int HeaderId { get; set; }
+    [Parameter]
+    public int EntityId { get; set; } = 0;
+    private bool RenderedOnce = false;
+    private HddInventoryVoucherDto? Entity = new HddInventoryVoucherDto();
+    private InventoryVoucherHDVM EntityVM;
+    private List<StoreListDto>? StoreList;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!RenderedOnce)
+        {
+            RenderedOnce = true;
+            await LoadEntityVM();
+            await LoadStoreList();
+            StateHasChanged();
+        }
+    }
+    private async Task LoadEntityVM()
+    {
+        if (EntityId == 0) //If Insertion
+        {
+            var HeaderEntity = await storeService.GetInventoryVoucherSpecificationById(HeaderId);
+            EntityVM = new InventoryVoucherHDVM() { Items = null, Voucher = new InventoryVoucherListVM() {
+                        InventoryVoucherSpecificationId = HeaderEntity.Id,
+                        InventoryVoucherSpecificationTitle = HeaderEntity.Title,
+                        InventoryVoucherSpecificationTypeEnumTitle = HeaderEntity.InventoryVoucherSpecificationTypeEnumTitle,
+                        UserId = 1}
+            };
+        }
+        else // If Edit
+        {
+          EntityVM = await storeService.GetInventoryVoucherByIdCustom(EntityId);
+        }
+    }
+    private async Task LoadStoreList()
+    {
+        if (EntityVM == null || EntityVM.Items == null || EntityVM.Items.Count == 0) //If Insertion
+        {
+            StoreList = await storeService.GetStoreList();
+        }
+    }
+    private void AssignStore(StoreListDto selectedStore)
+    {
+        EntityVM.Voucher.StoreId = selectedStore.Id;
+        EntityVM.Voucher.StoreTitle = selectedStore.Title;
+    }
+    private async Task AssignList(List<HddInventoryVoucherItemListDto> List)
+    {
+        Entity.InventoryVoucherItemList = List;
+    }
+    private void AssignEntity() //Editable Fields Only!
+    {
+        Entity.Id = EntityVM.Voucher.Id;
+        Entity.PersianDate = EntityVM.Voucher.PersianDate;
+        Entity.Comment = EntityVM.Voucher.Comment;
+        Entity.StoreId = EntityVM.Voucher.StoreId;
+        Entity.StoreTitle = EntityVM.Voucher.StoreTitle;
+        Entity.InventoryVoucherSpecificationId = EntityVM.Voucher.InventoryVoucherSpecificationId;
+        Entity.InventoryVoucherSpecificationTitle = EntityVM.Voucher.InventoryVoucherSpecificationTitle;
+        Entity.JsonField = EntityVM.Voucher.JsonField;
+        Entity.BaseEntity = EntityVM.Voucher.BaseEntity;
+        Entity.BaseEntityTitle = EntityVM.Voucher.BaseEntityTitle;
+        Entity.BaseEntityRef = EntityVM.Voucher.BaseEntityRef;
+        Entity.UserId = EntityVM.Voucher.UserId;
+    }
+
+    // ToolBar Actions -------------------------------------------------------------------------
+
+    private async Task OnSaveClick()
+    {
+         AssignEntity();
+         await storeService.SaveReceipt(Entity);
+    }
+    private void OnSaveAndCloseClick()
+    {
+
+    }
+    private void OnReloadClick()
+    {
+
+    }
+}

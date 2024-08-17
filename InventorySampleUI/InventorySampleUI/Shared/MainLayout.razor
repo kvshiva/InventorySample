@@ -1,0 +1,33 @@
+﻿@inherits LayoutComponentBase
+
+<style>
+    @@font-face {
+        font-family: Vazir;
+        src: url('fonts/Vazir/Vazir-Regular-FD.eot');
+        src: url('fonts/Vazir/Vazir-Regular-FD.eot?#iefix') format('embedded-opentype'), url('fonts/Vazir/Vazir-Regular-FD.woff2') format('woff2'), url('fonts/Vazir/Vazir-Regular-FD.woff') format('woff'), url('fonts/Vazir/Vazir-Regular-FD.ttf') format('truetype');
+        font-weight: 100;
+        font-style: normal;
+    }
+
+    body *:not(.k-icon,.bi, .bi *) {
+        font-family: Vazir !important;
+    }
+</style>
+
+<PageTitle>InventorySampleUI</PageTitle>
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

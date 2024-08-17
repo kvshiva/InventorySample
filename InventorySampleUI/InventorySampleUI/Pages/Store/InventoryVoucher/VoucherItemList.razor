@@ -1,0 +1,176 @@
+﻿@page "/VoucherItemList/"
+
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using BlazorBootstrap;
+@using System.Collections.ObjectModel
+@using InventorySampleServer.Model.Custom.InventoryVoucher
+@using InventorySampleServer.Model.Custom.Other
+@using InventorySampleServer.Model.Store.InventoryVoucher
+@using InventorySampleServer.Model.Store.InventoryVoucherItem
+@using InventorySampleUI.Service;
+@using InventorySampleUI.Shared.Toolbar;
+@using InventorySampleServer.Model.Enum;
+@using InventorySampleUI.Pages.Store.InventoryVoucher.Receipt;
+@using InventorySampleUI.Pages.Store.InventoryVoucher.Remittance;
+@using Common.Enum;
+@using Common;
+
+<h3>لیست اقلام سند</h3>
+<ListToolbar OnNewClick="OnNewClick" ShowEdit="RowClicked" ShowDelete=RowClicked OnEditClick="OnEditClick" OnDeleteClick="OnDeleteClick" OnReloadClick="OnReloadClick" />
+@if (HeaderVM.Items?.Count>0)
+{
+    <BlazorBootstrap.Grid @ref="grid"
+                          TItem="InventoryVoucherItemListVM"
+                          Class="table table-hover table-bordered table-striped"
+                          Data="HeaderVM.Items"
+                          AllowFiltering="true"
+                          Responsive="true" Style="direction:rtl"
+                          AllowRowClick="true"
+                          OnRowClick="OnRowClick"
+                          OnRowDoubleClick="OnRowDoubleClick">
+        <GridColumn TItem="InventoryVoucherItemListVM" HeaderText=" نام کالا "> @context.PartTitle </GridColumn>
+        <GridColumn TItem="InventoryVoucherItemListVM" HeaderText="مقدار اول"> @context.Value1 </GridColumn>
+        <GridColumn TItem="InventoryVoucherItemListVM" HeaderText="مقدار دوم"> @context.Value2</GridColumn>
+        <GridColumn TItem="InventoryVoucherItemListVM" HeaderText="واحد شمارش اول"> @context.Unit1 </GridColumn>
+        <GridColumn TItem="InventoryVoucherItemListVM" HeaderText="واحد شمارش دوم"> @context.Unit2 </GridColumn>
+        <GridColumn TItem="InventoryVoucherItemListVM" HeaderText="توضیح"> @context.Comment </GridColumn>
+        <GridColumn TItem="InventoryVoucherItemListVM" HeaderText="دارای سریال"> @context.HasSerial </GridColumn>
+
+
+    </BlazorBootstrap.Grid>
+}
+    <Modal @ref="modal" Class="z-widget-list-modal">
+        <HeaderTemplate>ثبت کالا</HeaderTemplate>
+        <BodyTemplate>
+            @if (HeaderVM?.Voucher.InventoryVoucherSpecificationTypeEnumTitle == InventoryVoucherSpecificationTypeEnum.رسید.ToString())
+            {
+                <ReceiptItemEdit EntityVM="SelectedRow" StoreId="HeaderVM.Voucher.StoreId" OnSave="OnHideModalClick"></ReceiptItemEdit>
+            }
+            @if (HeaderVM?.Voucher.InventoryVoucherSpecificationTypeEnumTitle == InventoryVoucherSpecificationTypeEnum.حواله.ToString())
+            {
+                <RemittanceItemEdit></RemittanceItemEdit>
+            }
+        </BodyTemplate>
+    </Modal>
+
+
+@code {
+@inject NavigationManager UriHelper
+    @inject StoreService storeService
+    BlazorBootstrap.Grid<InventoryVoucherItemListVM> grid = default!;
+    private InventoryVoucherItemListVM? SelectedRow;
+    private bool RowClicked = false;
+    private bool RenderedOnce = false;
+    private Modal modal = default!;
+    [Parameter]
+    public InventoryVoucherHDVM? HeaderVM { get; set; }
+    [Parameter]
+    public EventCallback<List<HddInventoryVoucherItemListDto>> OnListChange { get; set; }
+    public List<HddInventoryVoucherItemListDto> List = new List<HddInventoryVoucherItemListDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (HeaderVM.Items == null) HeaderVM.Items = new List<InventoryVoucherItemListVM>();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+    }
+    private async Task OnHideModalClick(InventoryVoucherItemListVM Entity)
+    {
+        RowClicked = false;
+        UpdateData(Entity);
+        await modal.HideAsync();
+
+    }
+    // ToolBar Actions ----------------------------------------------
+    private async void OnReloadClick()
+    {
+        StateHasChanged();
+    }
+    private async void OnNewClick()
+    {
+        SelectedRow = new InventoryVoucherItemListVM() { Id = 0 };
+        await modal.ShowAsync();
+    }
+    private async void OnEditClick()
+    {
+        await modal.ShowAsync();
+    }
+    private void OnDeleteClick()
+    {
+
+    }
+    // Grid Row Actions ----------------------------------------------
+    private async Task OnRowClick(GridRowEventArgs<InventoryVoucherItemListVM> args)
+    {
+        RowClicked = true;
+        SelectedRow = args.Item;
+
+    }
+    private async Task OnRowDoubleClick(GridRowEventArgs<InventoryVoucherItemListVM> args)
+    {
+        RowClicked = true;
+        SelectedRow = args.Item;
+    }
+    private async void UpdateData(InventoryVoucherItemListVM Entity)
+    {
+        if (Entity.Id == 0)
+        {
+            Entity.Id = GenerateId();
+            List.Add(new HddInventoryVoucherItemListDto()
+                {
+                    Id = Entity.Id,
+                    InventoryVoucherId = Entity.InventoryVoucherId,
+                    PartId = Entity.PartId,
+                    PartTitle = Entity.PartTitle,
+                    Value1 = Entity.Value1,
+                    Value2 = Entity.Value2,
+                    Comment = Entity.Comment,
+                    JsonField = Entity.JsonField,
+                    RowState = RowStateEnum.Added.EnumToInt()
+                });
+            HeaderVM.Items.Add(Entity);
+            grid.RefreshDataAsync();
+        }
+        else if(List.Any(i=>i.Id==Entity.Id))
+        {
+            var OldEntity = List.First(i => i.Id == Entity.Id);
+            int index = List.IndexOf(OldEntity);
+            var UpdatedEntity = new HddInventoryVoucherItemListDto()
+                {
+                    Id = Entity.Id,
+                    InventoryVoucherId = Entity.InventoryVoucherId,
+                    PartId = Entity.PartId,
+                    PartTitle = Entity.PartTitle,
+                    Value1 = Entity.Value1,
+                    Value2 = Entity.Value2,
+                    Comment = Entity.Comment,
+                    JsonField = Entity.JsonField,
+                    RowState = OldEntity.RowState
+                };
+            List[index] = UpdatedEntity;
+        }
+        else
+        {
+            List.Add(new HddInventoryVoucherItemListDto()
+                {
+                    Id = Entity.Id,
+                    InventoryVoucherId = Entity.InventoryVoucherId,
+                    PartId = Entity.PartId,
+                    PartTitle = Entity.PartTitle,
+                    Value1 = Entity.Value1,
+                    Value2 = Entity.Value2,
+                    Comment = Entity.Comment,
+                    JsonField = Entity.JsonField,
+                    RowState = RowStateEnum.Modified.EnumToInt()
+                });
+        }
+        await OnListChange.InvokeAsync(List);
+    }
+    private int GenerateId()
+    {
+        var min = HeaderVM.Items.Count > 0 ? (HeaderVM.Items.Select(i => i.Id)).Min() : -1;
+        return (min>0 ? -1: min - 1); 
+    }
+}

@@ -1,0 +1,133 @@
+﻿@page "/ReceiptItemEdit"
+
+@using Microsoft.AspNetCore.Components.Web;
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.JSInterop
+@using System.ComponentModel.DataAnnotations;
+@using BlazorBootstrap
+@using Blazor.PersianDatePicker
+@using InventorySampleServer.Model.Store.InventoryVoucherItem
+@using InventorySampleUI.Shared.Toolbar;
+@using InventorySampleUI.Service;
+@using InventorySampleServer.Model.Store.InventoryVoucher;
+@using InventorySampleServer.Model.Store.Store;
+@using InventorySampleServer.Model.Custom.InventoryVoucher;
+@using InventorySampleServer.Model.Part.Part;
+@using InventorySampleServer.Model.Custom.Other;
+
+
+<h3>ثبت کالای رسید</h3>
+
+@if (EntityVM != null)
+{
+    <EditToolbar  OnSaveClick="OnSaveClick" OnSaveAndCloseClick="OnSaveAndCloseClick" OnReloadClick="OnReloadClick"></EditToolbar>
+    <br />
+    <div class="d-flex gap-2 mb-4">
+        @if (PartList != null)
+        {
+            <Dropdown Color="DropdownColor.Light">
+                <DropdownToggleButton>انتخاب کالا</DropdownToggleButton>
+                <DropdownMenu>
+                    @foreach (var p in PartList)
+                    {
+                        <DropdownItem @onclick="() =>AssignPart(p)">@p.Title</DropdownItem>
+                    }
+                </DropdownMenu>
+            </Dropdown>
+        }
+    </div>
+    @if (EntityVM.PartId != 0)
+    {
+        <div class="form-group">
+            <label for="PartTitle">کالا</label>
+            <input type="text" id="storeTitle" class="form-control" @bind="EntityVM.PartTitle" readonly />
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="Unit1">واحد شمارش اول</label>
+            <input type="text" id="Unit1" class="form-control" @bind="EntityVM.Unit1" readonly />
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="Value1">مقدار اول</label>
+            <input type="number" id="Value1" class="form-control" @bind="EntityVM.Value1" />
+        </div>
+        @if (EntityVM.Unit2 != string.Empty && EntityVM.Unit2 != null)
+        {
+            <div class="form-group">
+                <label for="Unit2">واحد شمارش دوم</label>
+                <input type="text" id="Unit2" class="form-control" @bind="EntityVM.Unit2" readonly />
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="Value2">مقدار دوم</label>
+                <input type="text" id="Value2" class="form-control" @bind="EntityVM.Value2" />
+            </div>
+            <br />
+        }
+        <br />
+
+        <div class="form-group">
+            <label for="comment">توضیح</label>
+            <textarea id="comment" class="form-control" @bind="EntityVM.Comment"></textarea>
+        </div>
+    }
+}
+
+
+@code {
+    @inject PartService partservice;
+    [Parameter]
+    public InventoryVoucherItemListVM EntityVM { get; set; }
+    [Parameter]
+    public int StoreId { get; set; }
+    [Parameter]
+    public EventCallback<InventoryVoucherItemListVM> OnSave { get; set; }
+    private List<PartListDto>? PartList;
+    private bool RenderedOnce = false;
+
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!RenderedOnce)
+        {
+            RenderedOnce = true;
+            await LoadPartList();
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadPartList()
+    {
+        PartList = await partservice.GetPartListByStoreId(new GetListParamsDto() { EntityId = StoreId});
+    }
+    private void AssignPart(PartListDto selectedpart)
+    {
+        @if (EntityVM.PartId != selectedpart.Id)
+        {
+            EntityVM.PartId = selectedpart.Id;
+            EntityVM.PartTitle = selectedpart.Title;
+            EntityVM.HasSerial = selectedpart.HasSerial;
+            EntityVM.Unit1 = selectedpart.MainCountUnitTitle;
+            EntityVM.Unit2 = selectedpart.SecondaryCountUnitTitle;
+            EntityVM.Value1 = 0;
+            EntityVM.Value2 = 0;
+        }
+    }
+
+    // ToolBar Actions -------------------------------------------------------------------------
+
+    private async Task OnSaveClick()
+    {
+        await OnSave.InvokeAsync(EntityVM);
+    }
+    private void OnSaveAndCloseClick()
+    {
+
+    }
+    private void OnReloadClick()
+    {
+
+    }
+}
+

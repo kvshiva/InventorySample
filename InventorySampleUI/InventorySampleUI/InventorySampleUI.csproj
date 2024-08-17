@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazor.Bootstrap" Version="3.0.0-preview.3" />
+    <PackageReference Include="Blazor.PersianDatePicker" Version="3.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.7" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InventorySampleUI.Model\InventorySampleUI.Model.csproj" />
+    <ProjectReference Include="..\InventorySampleUI.Service\InventorySampleUI.Service.csproj" />
+  </ItemGroup>
+
+</Project>

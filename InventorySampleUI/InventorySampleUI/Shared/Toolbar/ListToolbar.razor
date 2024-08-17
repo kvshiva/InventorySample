@@ -1,0 +1,175 @@
+﻿
+<Ribbon>
+    <div class="d-flex flex-row  z-ribbon">
+        @if (ShowNew)
+        {
+            <Tooltip Class="d-inline-block" Title="جدید" role="button" @onclick="NewClicked" Placement="TooltipPlacement.Bottom">
+                <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/New.gif" ImgWidth="16" />
+            </Tooltip>
+        }
+        @if (ShowEdit)
+        {
+            <Tooltip Class="d-inline-block" Title="ویرایش" role="button" @onclick="EditClicked" Placement="TooltipPlacement.Bottom">
+                <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Edit.gif" ImgWidth="16" />
+            </Tooltip>
+        }
+        @if (ShowDelete)
+        {
+            <Tooltip Class="d-inline-block" Title="حذف" role="button" @onclick="DeleteClicked" Placement="TooltipPlacement.Bottom">
+                <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Delete.gif" ImgWidth="16" />
+            </Tooltip>
+        }
+         @if (ShowReload)
+        {
+        <Tooltip Class="d-inline-block" Title="بارگذاری مجدد" role="button" @onclick="ReloadClicked" Placement="TooltipPlacement.Bottom">
+            <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Reload.gif" ImgWidth="16" />
+            </Tooltip>
+        }
+        @if (ShowNotification)
+        {
+            <Tooltip Class="d-inline-block" Title="دریافت اطلاع از تغییرات" role="button" @onclick="NotificationClicked" Placement="TooltipPlacement.Bottom">
+                <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Notify.png" ImgWidth="16" />
+            </Tooltip>
+        }
+        @if (ShowExcel)
+        {
+            <Tooltip Class="d-inline-block" Title="ارسال به Excel" role="button" @onclick="ExcelClicked" Placement="TooltipPlacement.Bottom">
+                <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Excel.gif" ImgWidth="16" />
+            </Tooltip>
+        }
+        @if (ShowFilterHide)
+        {
+            <Tooltip Class="d-inline-block" Title="عدم نمایش فیلتر" role="button" @onclick="FilterHideClicked" Placement="TooltipPlacement.Bottom">
+                <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/FilterReset.gif" ImgWidth="16" />
+            </Tooltip>
+        }
+        @if (ShowMultiSelection)
+        {
+            <Tooltip Class="d-inline-block" Title="انتخاب چند رکوردی" role="button" @onclick="MultiSelectionClicked" Placement="TooltipPlacement.Bottom">
+                <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/DataOptionsMenu.gif" ImgWidth="16" />
+            </Tooltip>
+        }
+        @if (ShowCalc)
+        {
+            <Tooltip Class="d-inline-block" Title="محاسبه تعداد رکوردها و صفحات فهرست" role="button" @onclick="CalcClicked" Placement="TooltipPlacement.Bottom">
+                <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/List.gif" ImgWidth="16" />
+            </Tooltip>
+        }
+        @if (ShowPrint)
+        {
+            <Tooltip Class="d-inline-block" Title="چاپ" role="button" @onclick="PrintClicked" Placement="TooltipPlacement.Bottom">
+                <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Print.gif" ImgWidth="16" />
+            </Tooltip>
+        }
+        @if (ShowHelp)
+        {
+            <Tooltip Class="d-inline-block" Title="راهنما" role="button" @onclick="HelpClicked" Placement="TooltipPlacement.Bottom">
+                <RibbonItem Name="Appointment" ImgSrc="/images/Toolbar/Help.gif" ImgWidth="16" />
+            </Tooltip>
+        }
+    </div>
+</Ribbon>
+
+@code {
+    
+
+
+    [Parameter]
+    public bool ShowNew { get; set; } = true;
+    [Parameter]
+    public bool ShowEdit { get; set; } = true;
+    [Parameter]
+    public bool ShowDelete { get; set; } = true;
+    [Parameter]
+    public bool ShowReload { get; set; } = true;
+    [Parameter]
+    public bool ShowNotification { get; set; } = false;
+    [Parameter]
+    public bool ShowExcel { get; set; } = false;
+    [Parameter]
+    public bool ShowFilterHide { get; set; } = false;
+    [Parameter]
+    public bool ShowMultiSelection { get; set; } = false;
+    [Parameter]
+    public bool ShowCalc { get; set; } = false;
+    [Parameter]
+    public bool ShowPrint { get; set; } = false;
+    [Parameter]
+    public bool ShowHelp { get; set; } = false;
+
+
+    [Parameter]
+    public EventCallback<bool> OnNewClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnEditClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnDeleteClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnReloadClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnNotificationClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnExcelClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnFilterHideClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnMultiSelectionClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnCalcClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnPrintClick { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnHelpClick { get; set; }
+    private async Task OnConfirmDelete()
+    {
+
+        await OnDeleteClick.InvokeAsync(true);
+    }
+  
+    async Task NewClicked()
+    {
+        await OnNewClick.InvokeAsync(true);
+    }
+    async Task EditClicked()
+    {
+        await OnEditClick.InvokeAsync(true);
+    }
+    async Task DeleteClicked()
+    {
+        // FiredEvent = EventType.Delete;
+        // await modal.ShowAsync();
+        await OnDeleteClick.InvokeAsync(true);
+    }
+    async Task ReloadClicked()
+    {
+        await OnReloadClick.InvokeAsync(true);
+    }
+    async Task NotificationClicked()
+    {
+        await OnNotificationClick.InvokeAsync(true);
+    }
+    async Task ExcelClicked()
+    {
+        await OnExcelClick.InvokeAsync(true);
+    }
+    async Task FilterHideClicked()
+    {
+        await OnFilterHideClick.InvokeAsync(true);
+    }
+    async Task MultiSelectionClicked()
+    {
+        await OnMultiSelectionClick.InvokeAsync(true);
+    }
+    async Task CalcClicked()
+    {
+        await OnCalcClick.InvokeAsync(true);
+    }
+    async Task PrintClicked()
+    {
+        await OnPrintClick.InvokeAsync(true);
+    }
+    async Task HelpClicked()
+    {
+        await OnHelpClick.InvokeAsync(true);
+    }
+}
