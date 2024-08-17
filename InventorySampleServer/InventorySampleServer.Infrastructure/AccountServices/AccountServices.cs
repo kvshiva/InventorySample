@@ -55,7 +55,6 @@ namespace Infrastructure.AccountServices
                         FullName = userInfo.FullName,
                         IsActive = userInfo.IsActive,
                         Picture = userInfo.Picture ?? string.Empty,
-                        RahkaranUserRef = userInfo.RahkaranUserRef,
                         UserOperationRoleList = new List<OperationRoleDto>()
                     };
 
@@ -106,7 +105,6 @@ namespace Infrastructure.AccountServices
                 var Command = @"SELECT 
                                     [Id],
 									[FullName],
-									[RahkaranUserRef],
 									[IsActive],
 									[Picture],
 									[Mobile],
@@ -130,7 +128,6 @@ namespace Infrastructure.AccountServices
                 var Command = @"SELECT 
                                     [Id],
 									[FullName],
-									[RahkaranUserRef],
 									[IsActive],
 									[Picture],
 									[Mobile],
